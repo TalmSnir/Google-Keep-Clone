@@ -10,11 +10,16 @@ import {
 import Avatar from './Avatar';
 import IconButton from './IconButton';
 import ProfileImg from '../profileimg.jpg';
-export default function Header() {
+export default function Header({ showMenu, setShowMenu, setMenuIconPressed }) {
   return (
     <header className='flex items-center justify-between py-2 px-4 gap-8 border-b border-b-gray-200 h-16'>
       <div className='flex items-center gap-2'>
-        <IconButton size='sm' tooltip='grid' icon={MenuIcon} />
+        <IconButton
+          size='sm'
+          tooltip='grid'
+          icon={MenuIcon}
+          onClick={() => setMenuIconPressed(pressed => !pressed)}
+        />
         <IconButton size='sm' tooltip='grid' icon={DocumentIcon} />
       </div>
 

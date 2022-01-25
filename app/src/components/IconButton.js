@@ -19,7 +19,8 @@ export default function IconButton({
   ...rest
 }) {
   let classNames = clsx(
-    'rounded-full hover:bg-gray-100 p-2 focus-visible:outline-gray-400 focus-visible:outline-1 focus-visible:outline'
+    'rounded-full hover:bg-gray-100 p-2 focus-visible:outline-gray-400 focus-visible:outline-1 focus-visible:outline',
+    className
   );
   let iconSize = sizes[size];
   return (
