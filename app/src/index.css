@@ -1,13 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 html {
   height: 100vh;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 body {
   height: 100vh;
 }
 #root {
   height: 100%;
+}
+.new-note_placeholder::placeholder {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  color: black;
 }

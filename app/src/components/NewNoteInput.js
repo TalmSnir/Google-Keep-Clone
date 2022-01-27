@@ -1,43 +1,78 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import NoteFooterActions from './NoteFooterActions';
-import NewNoteActions from './NewNoteActions';
-import PinAction from './PinAction';
-import IconButton from './IconButton';
-import { CheckCircleIcon } from '@heroicons/react/outline';
+import NewNoteActions from './actions/NewNoteActions';
+import PinAction from './actions/PinAction';
+import useClickOutside from '.././hooks/useClickOutside';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import {
+  Button,
+  Container,
+  IconButton,
+  InputBase,
+  TextareaAutosize,
+} from '@mui/material';
+import { bgcolor, Box, palette } from '@mui/system';
+import UndoAction from './actions/UndoAction';
+import RedoActions from './actions/RedoActions';
 export default function NewNoteInput() {
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef(null);
+  useClickOutside(containerRef, () => setIsOpen(false));
   const handleShowInput = () => {
     setIsOpen(isOpen => !isOpen);
   };
   return (
-    <div className='shadow-lg w-1/2 mx-auto rounded-lg p-4 flex '>
-      <form className='flex flex-col gap-2 flex-grow' onClick={handleShowInput}>
-        {isOpen && (
-          <input
-            type='text'
-            placeholder='Title'
-            className='text-gray-700 placeholder:text-gray-900 placeholder:font-semibold focus:outline-none'
+    <Container
+      sx={{ boxShadow: 3, borderRadius: 3, width: '50%', p: 1 }}
+      ref={containerRef}>
+      <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+        <form
+          style={{
+            flexGrow: 1,
+          }}>
+          {isOpen && (
+            <InputBase
+              type='text'
+              placeholder='Title'
+              className='text-gray-700 placeholder:text-gray-900 placeholder:font-semibold focus:outline-none'
+            />
+          )}
+          <TextareaAutosize
+            onClick={handleShowInput}
+            aria-label='new note text area'
+            placeholder='Take a note ...'
+            rows={1}
+            style={{
+              width: '100%',
+              resize: 'none',
+              appearance: 'none',
+              border: 0,
+              outline: 0,
+            }}
+            className='new-note_placeholder'
           />
-        )}
+        </form>
+        {isOpen ? <PinAction position='relative' /> : <NewNoteActions />}
+      </Box>
 
-        <textarea
-          placeholder='Take a note ...'
-          className='focus:outline-none placeholder:text-gray-900 placeholder:font-semibold '></textarea>
-      </form>
-      <NewNoteActions />
       {isOpen ? (
         <>
-          <PinAction />
-
-          <div className='flex justify-between items-center'>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
             <NoteFooterActions />
-            <IconButton tooltip='undo' icon={CheckCircleIcon} />
-            <IconButton tooltip='redo' icon={CheckCircleIcon} />
-            <button onClick={handleShowInput}>close</button>
-          </div>
+            <UndoAction />
+            <RedoActions />
+            <Button onClick={handleShowInput} sx={{ color: 'gray' }}>
+              close
+            </Button>
+          </Box>
         </>
       ) : null}
-    </div>
+    </Container>
   );
 }

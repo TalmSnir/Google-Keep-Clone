@@ -1,23 +1,21 @@
 import React from 'react';
 
-import RemindAction from './RemindAction';
-import MoreAction from './MoreAction';
-import ArchiveAction from './ArchiveAction';
-import AddCollaboratorAction from './AddCollaboratorAction';
-import BackgroundOptionsAction from './BackgroundOptionsAction';
-import AddImageAction from './AddImageActions';
-import clsx from 'clsx';
+import RemindAction from './actions/RemindAction';
+import MoreAction from './actions/MoreAction';
+import ArchiveAction from './actions/ArchiveAction';
+import AddCollaboratorAction from './actions/AddCollaboratorAction';
+import BackgroundOptionsAction from './actions/BackgroundOptionsAction';
+import AddImageAction from './actions/AddImageAction';
 
-export default function NoteFooterActions({ className }) {
-  let classNames = clsx('flex justify-between items-center ', className);
+export default function NoteFooterActions() {
   return (
-    <div className={classNames}>
+    <>
       <RemindAction />
       <AddCollaboratorAction />
       <BackgroundOptionsAction />
       <AddImageAction />
       <ArchiveAction />
       <MoreAction />
-    </div>
+    </>
   );
 }

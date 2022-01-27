@@ -1,12 +1,12 @@
 import React from 'react';
 import Note from './Note';
-
-export default function NotesGrid({ notes }) {
+import Masonry from '@mui/lab/Masonry';
+export default function NotesGrid({ notes, gridView }) {
   return (
-    <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 grid-flow-col-dense'>
+    <Masonry columns={gridView ? 3 : 1} spacing={1}>
       {notes.map((note, id) => (
         <Note key={id}>{note}</Note>
       ))}
-    </section>
+    </Masonry>
   );
 }

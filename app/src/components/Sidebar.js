@@ -1,17 +1,74 @@
-import { BellIcon, TrashIcon } from '@heroicons/react/outline';
-import { useRef } from 'react';
-import useClickOutside from '../hooks/useClickOutside';
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+
+import MuiDrawer from '@mui/material/Drawer';
+
+import List from '@mui/material/List';
+
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+
+import { useSelector } from 'react-redux';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import { NavLink } from 'react-router-dom';
-import DeleteAction from './DeleteAction';
-import EditLabelsAction from './EditLabelsAction';
+import { Box } from '@mui/system';
+import { Link } from '@mui/material';
+
 let links = [
-  { path: 'notes', title: 'notes', icon: BellIcon },
-  { path: 'reminders', title: 'reminders', icon: BellIcon },
-  { path: 'personal', title: 'personal', icon: BellIcon },
-  { path: 'work', title: 'work', icon: BellIcon },
-  { path: 'shopping', title: 'shopping', icon: BellIcon },
-  { path: 'trash', title: 'delete', icon: TrashIcon },
+  { path: 'notes', title: 'notes', icon: NotificationsOutlinedIcon },
+  { path: 'reminders', title: 'reminders', icon: LabelOutlinedIcon },
+  { path: 'personal', title: 'personal', icon: LabelOutlinedIcon },
+  { path: 'work', title: 'work', icon: LabelOutlinedIcon },
+  { path: 'shopping', title: 'shopping', icon: LabelOutlinedIcon },
+  { path: 'trash', title: 'delete', icon: DeleteOutlineOutlinedIcon },
+  { path: 'archive', title: 'archive', icon: ArchiveOutlinedIcon },
 ];
+
+const drawerWidth = 240;
+
+const openedMixin = theme => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = theme => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(9)} + 1px)`,
+  },
+});
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: prop => prop !== 'open',
+})(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
+  position: 'relative',
+  ...(open && {
+    ...openedMixin(theme),
+    '& .MuiDrawer-paper': openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
+  }),
+  '& .MuiPaper-root': { position: 'relative' },
+}));
 
 export default function Sidebar({
   showMenu,
@@ -19,50 +76,38 @@ export default function Sidebar({
   menuIconPressed,
   setMenuIconPressed,
 }) {
-  let sideBarRef = useRef(null);
-  useClickOutside(
-    sideBarRef,
-    () => menuIconPressed && setMenuIconPressed(false)
-  );
-  return (
-    <aside
-      ref={sideBarRef}
-      className={`h-full pt-4 ${showMenu && 'shadow-xl'} ${
-        (showMenu || menuIconPressed) && ' w-1/4'
-      }`}
-      onMouseEnter={() => setShowMenu(true)}
-      onMouseLeave={() => setShowMenu(false)}>
-      <nav>
-        <ul className='list-none flex flex-col items-start w-full'>
-          {links.map(link => (
-            <li
-              key={link.path}
-              className=' overflow-hidden hover:bg-gray-100 active: rounded-r-full w-full'>
-              <NavLink
-                to={link.path}
-                className={({ isActive }) =>
-                  isActive
-                    ? 'bg-yellow-100   flex gap-4 items-center '
-                    : '  flex gap-4 items-center '
-                }>
-                <span className='h-12  aspect-square flex items-center justify-center  p-2 rounded-full hover:bg-gray-100  focus-visible:outline-gray-400 focus-visible:outline-1 focus-visible:outline'>
-                  <link.icon className=' h-6 aspect-square' />
-                </span>
-                <span
-                  className={`w-max ${
-                    !showMenu && !menuIconPressed && 'hidden'
-                  }`}>
-                  {link.title}
-                </span>
-              </NavLink>
-            </li>
-          ))}
+  let isOpen = useSelector(state => state.menu.isOpen);
 
-          <li>
-            <EditLabelsAction />
-          </li>
-        </ul>
-      </nav>
-    </aside>
+  return (
+    <Box>
+      <Drawer variant='permanent' open={isOpen}>
+        <List>
+          {links.map(link => (
+            <ListItem
+              key={link.title}
+              sx={{
+                '&:hover': { backgroundColor: 'whitesmoke' },
+                borderRadius: '0 3rem 3rem 0',
+              }}>
+              <Link
+                component={NavLink}
+                to={link.path}
+                underline='none'
+                className={({ isActive }) => isActive && 'active-link'}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  color: 'inherit',
+                }}>
+                <ListItemIcon>
+                  <link.icon fontSize='medium' color='inherit' />
+                </ListItemIcon>
+                <ListItemText primary={link.title} />
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+    </Box>
   );
 }
