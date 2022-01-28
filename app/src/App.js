@@ -16,7 +16,6 @@ const notes = [
 function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [menuIconPressed, setMenuIconPressed] = useState(false);
-  const [gridView, setGridView] = useState(true);
 
   return (
     <Provider store={store}>
@@ -40,14 +39,11 @@ function App() {
                 flexGrow: 1,
                 gap: '2rem',
                 marginInline: 'auto',
+                p: 4,
               }}>
               <NewNoteInput />
               <Routes>
-                <Route
-                  path='/'
-                  element={
-                    <NotesGrid notes={notes} gridView={gridView} />
-                  }></Route>
+                <Route path='/' element={<NotesGrid notes={notes} />}></Route>
               </Routes>
             </Container>
           </Box>

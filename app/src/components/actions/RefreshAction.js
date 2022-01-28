@@ -17,7 +17,9 @@ export default function RefreshAction() {
       loadingPosition='center'
       onClick={handleRefresh}
       loading={isRefresh}
-      startIcon={<RefreshOutlinedIcon size='lg' aria-label='refresh' />}
+      startIcon={
+        <RefreshOutlinedIcon size='lg' aria-label='refresh' color='dark' />
+      }
     />
   );
 }

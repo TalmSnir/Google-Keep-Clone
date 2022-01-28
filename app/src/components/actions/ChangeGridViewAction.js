@@ -1,21 +1,22 @@
+import React from 'react';
 import { IconButton } from '@mui/material';
-import React, { useState } from 'react';
 import ViewAgendaOutlinedIcon from '@mui/icons-material/ViewAgendaOutlined';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleGridView } from '../../stateManagement/GridState';
 export default function ChangeGridViewAction() {
-  const [gridView, setGridView] = useState(true);
-  const handleChangeView = () => {
-    setGridView(view => !view);
-  };
+  const dispatch = useDispatch();
+  const isGridView = useSelector(state => state.gridView.isGridView);
+
   return (
     <IconButton
       size='large'
       aria-label='change grid view'
-      onClick={handleChangeView}>
-      {gridView ? (
+      onClick={() => dispatch(toggleGridView())}>
+      {isGridView ? (
         <GridViewOutlinedIcon />
       ) : (
-        <ViewAgendaOutlinedIcon size='lg' />
+        <ViewAgendaOutlinedIcon fontSize='medium' />
       )}
     </IconButton>
   );

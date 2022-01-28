@@ -93,7 +93,6 @@ export default function Sidebar({
                 component={NavLink}
                 to={link.path}
                 underline='none'
-                className={({ isActive }) => isActive && 'active-link'}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
